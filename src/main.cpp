@@ -201,9 +201,15 @@ int heltec_version = 3;
 static int32_t ledBlinker()
 {
     static bool ledOn;
+
+if (moduleConfig.heartbeat.enabled) {
     ledOn ^= 1;
 
     setLed(ledOn);
+}
+else {
+    setLed(0);
+}
 
     // have a very sparse duty cycle of LED being on, unless charging, then blink 0.5Hz square wave rate to indicate that
     return powerStatus->getIsCharging() ? 1000 : (ledOn ? 1 : 1000);
@@ -351,6 +357,7 @@ void setup()
 #endif
 
     OSThread::setup();
+
 
     ledPeriodic = new Periodic("Blink", ledBlinker);
 

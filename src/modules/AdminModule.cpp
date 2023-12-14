@@ -389,6 +389,11 @@ void AdminModule::handleSetModuleConfig(const meshtastic_ModuleConfig &c)
         moduleConfig.has_ambient_lighting = true;
         moduleConfig.ambient_lighting = c.payload_variant.ambient_lighting;
         break;
+    case meshtastic_ModuleConfig_heartbeat_tag:
+        LOG_INFO("Setting module config: heartbeat\n");
+        moduleConfig.has_heartbeat = true;
+        moduleConfig.heartbeat = c.payload_variant.heartbeat;
+        break;
     }
 
     saveChanges(SEGMENT_MODULECONFIG);
@@ -538,6 +543,11 @@ void AdminModule::handleGetModuleConfig(const meshtastic_MeshPacket &req, const 
             LOG_INFO("Getting module config: Ambient Lighting\n");
             res.get_module_config_response.which_payload_variant = meshtastic_ModuleConfig_ambient_lighting_tag;
             res.get_module_config_response.payload_variant.ambient_lighting = moduleConfig.ambient_lighting;
+            break;
+        case meshtastic_AdminMessage_ModuleConfigType_HEARTBEAT_CONFIG:
+            LOG_INFO("Getting module config: Heartbeat\n");
+            res.get_module_config_response.which_payload_variant = meshtastic_ModuleConfig_heartbeat_tag;
+            res.get_module_config_response.payload_variant.heartbeat = moduleConfig.heartbeat;
             break;
         }
 
